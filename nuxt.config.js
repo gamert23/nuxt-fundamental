@@ -1,4 +1,5 @@
 export default {
+  serverMiddleware: ['~/api/auth.js'],
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     title: 'nuxt-app',
@@ -32,8 +33,32 @@ export default {
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
-  modules: ['@nuxtjs/axios'],
+  modules: [
+    '@nuxtjs/axios',
+    '@nuxtjs/auth-next'
+  ],
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
+
+  axios: {
+    // baseUrl: 'http://localhost:3000'
+  },
+  auth: {
+    strategies: {
+      local: {
+        token: {
+          property: 'token',
+          global: true,
+          // required: true,
+          // type: 'Bearer'
+        },
+        endpoints: {
+          login: { url: '/api/auth/login', method: 'post' },
+          logout: false,
+          user: { url: '/api/auth/me', method: 'get' }
+        }
+      }
+    }
+  }
 }

@@ -1,3 +1,5 @@
 <template>
-  <div>Test</div>
+  <b-container>
+    <h1>Blog</h1>
+  </b-container>
 </template>

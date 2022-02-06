@@ -24,23 +24,44 @@
 
 <script>
 export default {
-  async asyncData({ $axios }) {
-    const baseUrl = 'https://api.github.com'
-
-    const user = await $axios.$get(`${baseUrl}/users/gamert23`)
-    const repos = await $axios.$get(`${baseUrl}/users/gamert23/repos`)
-
-    return {
-      user,
-      repos,
-    }
-  },
   data() {
     return {
+      user: null,
+      repos: [],
       show: 6,
     }
   },
+  mounted() {
+    this.fetchData()
+  },
   methods: {
+    async fetchData() {
+      const baseUrl = 'https://api.github.com'
+
+      const [user, repos] = await Promise.all([
+        this.$axios.$get(`${baseUrl}/users/gamert23`, {
+          transformRequest: [
+            (data, headers) => {
+              delete headers.common.authorization
+
+              return data
+            },
+          ],
+        }),
+        this.$axios.$get(`${baseUrl}/users/gamert23/repos`, {
+          transformRequest: [
+            (data, headers) => {
+              delete headers.common.authorization
+
+              return data
+            },
+          ],
+        }),
+      ])
+
+      this.user = user
+      this.repos = repos
+    },
     redirect(url) {
       window.open(url, '_blank')
     },
